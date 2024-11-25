@@ -5,10 +5,10 @@ import { DependencyType } from '~/components/ui/auto-form/interface'
 import { toast } from '~/components/ui/toast';
 
 const schema = z.object({
-  firstName: z.string({ description: "First Name" }).default("first name"),
-  lastName: z.string({ description: "Last Name" }).default("last name"),
-  fullName: z.string({ description: "Full Name" }).default("full name"),
-  userName: z.string({ description: "User Name" }).default("user name"),
+  firstName: z.string({ description: "First Name", required_error: "required field" }),
+  lastName: z.string({ description: "Last Name", required_error: "required field" }),
+  fullName: z.string({ description: "Full Name", required_error: "required field" }),
+  userName: z.string({ description: "User Name", required_error: "required field" }).optional(),
 })
 
 function onSubmit(values: Record<string, any>) {
@@ -24,30 +24,30 @@ function onSubmit(values: Record<string, any>) {
     <CardContent class="tw-p-0">
       <AutoForm class="w-2/3 space-y-6" :schema :field-config="{
         firstName: {
-          description: 'Disabled by dependency configuration',
+          description: 'Required condition disabled by dependency configuration',
         },
         lastName: {
-          description: 'Disabled using component slot',
+          description: 'Required condition disabled using component slot',
         },
         fullName: {
-          description: 'Disabling using inputProps option in field config',
+          description: 'Required condition disabled using `inputProps` option in field config',
           inputProps: {
-            disabled: true,
+            required: false,
           },
         },
         userName: {
-          description: 'Not Disabled',
+          description: 'Required condition disabled using zod schema',
         },
       }" :dependencies="[
         {
           sourceField: 'firstName',
           targetField: 'firstName',
-          type: DependencyType.DISABLES,
-          when: () => true
+          type: DependencyType.REQUIRES,
+          when: () => false
         }
       ]" @submit="onSubmit">
         <template #lastName="slotProps">
-          <AutoFormFieldInput v-bind="slotProps" disabled />
+          <AutoFormFieldInput v-bind="slotProps" :required="false" />
         </template>
         <Button type="submit">
           Submit
