@@ -1,24 +1,20 @@
 <script setup lang="ts">
-import { useForm } from "vee-validate";
-import { h } from "vue";
+import { getLocalTimeZone, parseAbsolute } from "@internationalized/date";
 import * as z from "zod";
+import { useForm } from "vee-validate";
+import { toTypedSchema } from "@vee-validate/zod";
 import { toast } from "~/components/ui/toast";
-import {
-  getLocalTimeZone,
-  parseAbsolute,
-  type DateValue,
-} from "@internationalized/date";
 
 const schema = z.object({
-  date: z.coerce.date(),
+  date: z
+    .any() // for all possibilities value (in case: DateValue type from @internationalized/date)
+    .refine((val) => val, 'Invalid Date'), // Ensure the 'date' field is required (i.e., not undefined)
 });
 
 const form = useForm({
+  validationSchema: toTypedSchema(schema), // for validation
   initialValues: {
-    date: parseAbsolute(
-      new Date().toISOString(),
-      getLocalTimeZone()
-    ) as DateValue as unknown as Date,
+    date: parseAbsolute(new Date().toISOString(), getLocalTimeZone()),
   },
 });
 
@@ -38,6 +34,9 @@ function onSubmit(values: Record<string, any>) {
   <Card>
     <CardContent class="tw-p-0">
       <AutoForm class="w-2/3 space-y-6" :schema :form @submit="onSubmit">
+        <template #date="slotProps">
+          <AutoFormFieldDate v-bind="slotProps" required />
+        </template>
         <Button type="submit"> Submit </Button>
       </AutoForm>
     </CardContent>
