@@ -6,15 +6,17 @@ import { toTypedSchema } from "@vee-validate/zod";
 import { toast } from "~/components/ui/toast";
 
 const schema = z.object({
-  date: z
-    .any() // for all possibilities value (in case: DateValue type from @internationalized/date)
-    .refine((val) => val, 'Invalid Date'), // Ensure the 'date' field is required (i.e., not undefined)
+  text: z.string().min(1),
+  number: z.number().min(1),
 });
+
+const formValue = reactive({ text: 'description', number: 100 });
 
 const form = useForm({
   validationSchema: toTypedSchema(schema), // for validation
   initialValues: {
-    date: parseAbsolute(new Date().toISOString(), getLocalTimeZone()),
+    text: 'text',
+    number: 1,
   },
 });
 
@@ -33,10 +35,16 @@ function onSubmit(values: Record<string, any>) {
 <template>
   <Card>
     <CardContent class="tw-p-0">
+      <pre>formValue - {{ formValue }}</pre>
+
       <AutoForm class="w-2/3 space-y-6" :schema :form @submit="onSubmit">
-        <template #date="slotProps">
-          <AutoFormFieldDate v-bind="slotProps" required />
+        <template #text="slotProps">
+          <AutoFormFieldInput v-model="formValue.text" v-bind="slotProps" required />
         </template>
+        <template #number="slotProps">
+          <AutoFormFieldNumber v-model="formValue.number" v-bind="slotProps" required />
+        </template>
+
         <Button type="submit"> Submit </Button>
       </AutoForm>
     </CardContent>
