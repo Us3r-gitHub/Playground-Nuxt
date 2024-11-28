@@ -14,7 +14,7 @@ const formValue = reactive({ text: 'description', number: 100, text2Number: '100
 
 const form = useForm({
   validationSchema: toTypedSchema(schema),
-  initialValues: formValue, // We can pass reactive object for initialValues. Note: Vue reactivity works only with reactive objects, not refs (this will cause TypeScript error).
+  initialValues: { text: '', number: 0, text2Number: '0' }, // avoid to use vue reactivity https://github.com/logaretm/vee-validate/discussions/4955
 });
 
 function onSubmit(values: Record<string, any>) {
