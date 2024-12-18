@@ -10,12 +10,12 @@ const schema = z.object({
   number: z.number().min(1),
 });
 
-const formValue = reactive({ text: 'description', number: 100 });
+const formValue = reactive({ text: "description", number: 100 });
 
 const form = useForm({
   validationSchema: toTypedSchema(schema), // for validation
   initialValues: {
-    text: 'text',
+    text: "text",
     number: 1,
   },
 });
@@ -35,14 +35,32 @@ function onSubmit(values: Record<string, any>) {
 <template>
   <Card>
     <CardContent class="tw-p-0">
+      <h1>Navigation</h1>
+      <ul>
+        <li><NuxtLink to="/"> Goto Home Page </NuxtLink></li>
+        <li><NuxtLink to="/form"> Goto Form Page </NuxtLink></li>
+        <li><NuxtLink to="/print"> Goto Print Page </NuxtLink></li>
+      </ul>
+    </CardContent>
+  </Card>
+  <Card>
+    <CardContent class="tw-p-0">
       <pre>formValue - {{ formValue }}</pre>
 
       <AutoForm class="w-2/3 space-y-6" :schema :form @submit="onSubmit">
         <template #text="slotProps">
-          <AutoFormFieldInput v-model="formValue.text" v-bind="slotProps" required />
+          <AutoFormFieldInput
+            v-model="formValue.text"
+            v-bind="slotProps"
+            required
+          />
         </template>
         <template #number="slotProps">
-          <AutoFormFieldNumber v-model="formValue.number" v-bind="slotProps" required />
+          <AutoFormFieldNumber
+            v-model="formValue.number"
+            v-bind="slotProps"
+            required
+          />
         </template>
 
         <Button type="submit"> Submit </Button>
