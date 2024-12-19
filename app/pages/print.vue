@@ -21,6 +21,16 @@ const { handlePrint } = useVueToPrint({
 <template>
   <Card>
     <CardContent class="tw-p-0">
+      <h1>Navigation</h1>
+      <ul>
+        <li><NuxtLink to="/"> Goto Home Page </NuxtLink></li>
+        <li><NuxtLink to="/form"> Goto Form Page </NuxtLink></li>
+        <li><NuxtLink to="/print"> Goto Print Page </NuxtLink></li>
+      </ul>
+    </CardContent>
+  </Card>
+  <Card>
+    <CardContent class="tw-p-0">
       <Tabs v-model="currentTab">
         <TabsList>
           <TabsTrigger v-for="tab in tabs" :key="tab.key" :value="tab.key">

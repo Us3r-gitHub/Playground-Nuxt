@@ -43,4 +43,28 @@ function onSubmit(values: Record<string, any>) {
       </ul>
     </CardContent>
   </Card>
+  <Card>
+    <CardContent class="tw-p-0">
+      <pre>formValue - {{ formValue }}</pre>
+
+      <AutoForm class="w-2/3 space-y-6" :schema :form @submit="onSubmit">
+        <template #text="slotProps">
+          <AutoFormFieldInput
+            v-model="formValue.text"
+            v-bind="slotProps"
+            required
+          />
+        </template>
+        <template #number="slotProps">
+          <AutoFormFieldNumber
+            v-model="formValue.number"
+            v-bind="slotProps"
+            required
+          />
+        </template>
+
+        <Button type="submit"> Submit </Button>
+      </AutoForm>
+    </CardContent>
+  </Card>
 </template>
