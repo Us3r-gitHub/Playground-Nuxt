@@ -12,7 +12,7 @@ const currentTab = ref<AccountOrPassword>("account");
 // VueToPrint
 const componentRef = ref();
 const { handlePrint } = useVueToPrint({
-  content: componentRef,
+  content: computed(() => componentRef.value[0]),
   documentTitle: currentTab,
   removeAfterPrint: true,
 });
